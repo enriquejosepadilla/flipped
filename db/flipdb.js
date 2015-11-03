@@ -4,7 +4,7 @@ var _ = require('lodash');
 var async = require('async');
 
 //var conString = "postgres://xbyevtqd:J-RzIZlrN4lLZF4Uzwh8Y8vZaC482fy5@pellefant.db.elephantsql.com:5432/xbyevtqd";
-var conString = "postgres://lschubert:@localhost/flipped";
+var conString = "postgres://mtbsickrider:@localhost/flipped";
 
 function test(cb){
     var client = new pg.Client(conString);

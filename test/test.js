@@ -31,7 +31,7 @@ describe('Testing Routes', function() {
             });
     });
 
-    it("logins successfully", function(done) {
+    it.skip("logins successfully", function(done) {
             var tu = {
                 username: "Enrique",
                 password: "abc123"
@@ -50,7 +50,7 @@ describe('Testing Routes', function() {
                     done();
                 });
     });
-    it("create class successfully", function(done) {
+    it.skip("create class successfully", function(done) {
         var newClass = {
             name: "Sexed",
             teacherId: "24d18c68-ecf0-4457-809f-ac02a818c27d"
@@ -69,7 +69,7 @@ describe('Testing Routes', function() {
             });
     });
 
-    it("create lecture successfully", function(done) {
+    it.skip("create lecture successfully", function(done) {
         var lecture = {
             name: "Condoms",
             classId: "bd50ac07-3b03-4ee2-82b7-4d92c40e9588",
@@ -101,7 +101,7 @@ describe('Testing Routes', function() {
                         }
                     ]
                 }]
-        }
+        };
 
         request(app)
             .post('/class/bd50ac07-3b03-4ee2-82b7-4d92c40e9588/lecture')
@@ -147,5 +147,21 @@ describe('Testing Routes', function() {
                 assert.equal(res.status, 200);
                 done();
             });
+    });
+    it.skip("get classes successfully", function(done) {
+        request(app)
+            .get('/classes/6dc391f1-84f1-4a01-8efd-e26170fd2d25/1')
+            //.send({
+            //    id: "6dc391f1-84f1-4a01-8efd-e26170fd2d25",
+            //    teacher: true
+            //})
+            .end(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+                assert.equal(res.status, 200);
+                console.log(res.body.classes);
+                done();
+            })
     });
 });
