@@ -1,95 +1,96 @@
 DROP DATABASE flipped
 CREATE DATABASE flipped
 
-CREATE TABLE appUser
+CREATE TABLE app_user
 (
 id UUID PRIMARY KEY,
 username varchar(20) NOT NULL UNIQUE,
 password varchar(30) NOT NULL,
-email varchar(40) UNIQUE,
-teacher BOOLEAN NOT NULL
+email varchar(40) NOT NULL UNIQUE,
+is_teacher BOOLEAN NOT NULL
 );
 
 CREATE TABLE class
 (
 id UUID PRIMARY KEY,
-name varchar(20),
-code varchar(7),
-teacherId UUID,
-FOREIGN KEY (teacherId) REFERENCES appUser(id)
+name varchar(20) NOT NULL,
+code varchar(7) NOT NULL,
+teacher_id UUID NOT NULL,
+FOREIGN KEY (teacher_id) REFERENCES app_user(id)
 );
 
-CREATE TABLE appUserClass
+CREATE TABLE app_user_class
 (
-classId UUID NOT NULL,
-appUserId UUID NOT NULL,
-PRIMARY KEY (classId, appUserId),
-FOREIGN KEY (appUserId) REFERENCES appUser(id),
-FOREIGN KEY (classId) REFERENCES class(id)
+class_id UUID NOT NULL,
+app_user_id UUID NOT NULL,
+PRIMARY KEY (class_id, app_user_id),
+FOREIGN KEY (app_user_id) REFERENCES app_user(id),
+FOREIGN KEY (class_id) REFERENCES class(id)
 );
 
 CREATE TABLE lecture
 (
 id UUID NOT NULL PRIMARY KEY,
-name varchar(20),
-classId UUID NOT NULL,
-videoUrl varchar(100) NOT NULL,
-FOREIGN KEY (classId) REFERENCES class(id)
+name varchar(20) NOT NULL,
+class_id UUID NOT NULL,
+video_url varchar(100),
+date_created timestamp NOT NULL,
+FOREIGN KEY (class_id) REFERENCES class(id)
 );
 
-CREATE TABLE appUserLecture
+CREATE TABLE app_user_lecture
 (
 id SERIAL PRIMARY KEY,
-lectureId UUID NOT NULL,
-appUserId UUID NOT NULL,
-grade int,
-dateGraded date NOT NULL,
-FOREIGN KEY (appUserId) REFERENCES appUser(id),
-FOREIGN KEY (lectureId) REFERENCES lecture(id)
+lecture_id UUID NOT NULL,
+app_user_id UUID NOT NULL,
+grade int NOT NULL,
+date_graded timestamp NOT NULL,
+FOREIGN KEY (app_user_id) REFERENCES app_user(id),
+FOREIGN KEY (lecture_id) REFERENCES lecture(id)
 );
 
-CREATE TYPE problemTypes AS ENUM ('mc','fib');
+CREATE TYPE problem_types AS ENUM ('mc','fib');
 CREATE TABLE problem
 (
 id int NOT NULL,
-lectureId UUID NOT NULL,
-problemType problemTypes,
+lecture_id UUID NOT NULL,
+problem_type problem_types,
 question varchar(128),
-PRIMARY KEY(lectureId, id),
-FOREIGN KEY (lectureId) REFERENCES lecture(id)
+PRIMARY KEY(lecture_id, id),
+FOREIGN KEY (lecture_id) REFERENCES lecture(id)
 );
 
-CREATE TABLE problemAnswer
+CREATE TABLE problem_answer
 (
-id int NOT NULL PRIMARY KEY,
-problemid int NOT NULL,
-lectureid UUID NOT NULL,
-possibleAnswer varchar(20),
-correctAnswer BOOLEAN,
-FOREIGN KEY (lectureId, problemId) REFERENCES problem(lectureId,id)
+id int PRIMARY KEY,
+problem_id int NOT NULL,
+lecture_id UUID NOT NULL,
+possible_answer varchar(20) NOT NULL,
+correct_answer BOOLEAN NOT NULL,
+FOREIGN KEY (lecture_id, problem_id) REFERENCES problem(lecture_id,id)
 );
 
 CREATE TABLE forum
 (
 id UUID NOT NULL PRIMARY KEY,
-lectureId UUID NOT NULL,
-problemId int NOT NULL,
-appUserId UUID NOT NULL,
+lecture_id UUID NOT NULL,
+problem_id int NOT NULL,
+app_user_id UUID NOT NULL,
 title varchar(50) NOT NULL,
 post varchar(500) NOT NULL,
-dateCreated date NOT NULL,
+date_created timestamp NOT NULL,
 answered boolean NOT NULL,
-answerTime int,
-FOREIGN KEY (lectureId, problemId) REFERENCES problem(lectureId, id)
+answer_time int,
+FOREIGN KEY (lecture_id, problem_id) REFERENCES problem(lecture_id, id)
 );
 
 CREATE TABLE comment
 (
 id int NOT NULL PRIMARY KEY,
-forumId int NOT NULL,
+forum_id int NOT NULL,
 comment varchar(500) NOT NULL,
-dateCreated date NOT NULL,
+date_created timestamp NOT NULL,
 answer boolean NOT NULL,
-appUserId UUID NOT NULL,
-FOREIGN KEY (appUserId) REFERENCES appUser(id)
+app_user_id UUID NOT NULL,
+FOREIGN KEY (app_user_id) REFERENCES app_user(id)
 );
