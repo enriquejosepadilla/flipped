@@ -79,9 +79,9 @@ app.controller('signupCtrl', ['$scope', '$routeParams','auth','$location',
     
     // Are we dealing with a tacher?
     if($scope.signupType == "teacher"){
-      $scope.user.teacher = true;
+      $scope.user.isTeacher = true;
     }else{
-      $scope.user.teacher = false;
+      $scope.user.isTeacher = false;
     }
 
     // Signup button clicked

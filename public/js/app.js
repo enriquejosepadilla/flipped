@@ -1,51 +1,54 @@
 var app = angular.module('app', [
-  'ngRoute'
+  'ui.router', 'ngRoute'
 ]);
 
-app.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/', {
-        templateUrl: 'templates/home.html',
-        controller: 'homeCtrl'
-      }).
-      when('/signup/:type', {
-        templateUrl: 'templates/signup.html',
-        controller: 'signupCtrl'
-      }).
-      when('/login', {
-        templateUrl: 'templates/login.html',
-        controller: 'loginCtrl'
-      }).
-      when('/class', {
-      	templateUrl: 'templates/classes.html',
-      	controller: 'classCtrl'
-      }).
-      when('/lecture/:classId', {
-      	templateUrl: 'templates/lecture_list.html',
-      	controller: 'lectureCtrl'
-      }).
-      when('/lecture/:classId/:lectureId', {
-        templateUrl: 'templates/lecture.html',
-        controller: 'lectureCtrl'
-      }).
-      when('/stream/:id', {
-      	templateUrl: 'templates/stream.html',
-      	controller: 'streamCtrl'
-      }).
-      when('/forum/:lectureId/:questionId', {
-        templateUrl: 'templates/forum.html',
-        controller: 'forumCtrl'
-      }).
-      when('/make/:classId', {
-        templateUrl: 'templates/make.html',
-        controller: 'makeCtrl'
-      }).
-      when('/shoutout/:classId', {
-        templateUrl: 'templates/shoutout.html',
-        controller: 'shoutoutCtrl'
-      }).
-      otherwise({
-        redirectTo: '/'
-      });
+app.config(['$urlRouterProvider','$stateProvider',
+  function($urlRouterProvider, $stateProvider) {
+    $stateProvider
+        .state('home',{
+          url: '/',
+          templateUrl: 'templates/home.html',
+          controller: 'homeCtrl'
+        })
+        .state('signup',{
+          url: '/signup/:type',
+          templateUrl: 'templates/signup.html',
+          controller: 'signupCtrl'
+        })
+        .state('login',{
+          url: '/login',
+          templateUrl: 'templates/login.html',
+          controller: 'loginCtrl'
+        })
+        .state('class',{
+          url: '/class',
+          templateUrl: 'templates/classes.html',
+          controller: 'classCtrl'
+        })
+        .state('lecture',{
+          url: '/lecture/:classId',
+          templateUrl: 'templates/lecture_list.html',
+          controller: 'lectureCtrl'
+        })
+        .state('lectureView',{
+          url: '/lecture/:classId/:lectureId',
+          templateUrl: 'templates/lecture.html',
+          controller: 'lectureCtrl'
+        })
+        .state('stream',{
+          url: '/stream/:id',
+          templateUrl: 'templates/stream.html',
+          controller: 'streamCtrl'
+        })
+        .state('forum',{
+          url: '/forum/:lectureId/:questionId',
+          templateUrl: 'templates/forum.html',
+          controller: 'forumCtrl'
+        })
+        .state('lectureCreation',{
+          url: '/make/:classId',
+          templateUrl: 'templates/make.html',
+          controller: 'makeCtrl'
+        });
+    $urlRouterProvider.otherwise('home');
   }]);
