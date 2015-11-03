@@ -32,11 +32,11 @@ function parametrize(object) {
     var first = true;
     _.forEach(object, function(value, key){
         if (first){
-            obj.valuesString += key;
+            obj.valuesString += _.snakeCase(key);
             obj.paramString += "$" + counter.toString();
             first = false;
         } else {
-            obj.valuesString += ", " + key;
+            obj.valuesString += ", " + _.snakeCase(key);
             obj.paramString += ", $" + counter.toString();
         }
         obj.valuesArray.push(value);
@@ -60,7 +60,7 @@ function insertData(info,cb){
         var params = parametrize(info.object);
 
         var queryString =
-            "INSERT INTO " + info.tableName + " " +
+            "INSERT INTO " + _.snakeCase(info.tableName) + " " +
             params.valuesString +
             "  VALUES " +
             params.paramString;
@@ -116,7 +116,7 @@ function selectData(info,cb) {
         var params = parametrize(info.object);
 
         var queryString =
-            "INSERT INTO " + info.tableName + " " +
+            "INSERT INTO " + _.snakeCase(info.tableName) + " " +
             params.valuesString +
             "  VALUES " +
             params.paramString;
@@ -181,6 +181,8 @@ function whereString(object) {
     return obj;
 }
 
+
+//TODO:REDO
 function retrieveUser(username,password, cb){
     var user = {};
     console.log("database part");
@@ -191,7 +193,7 @@ function retrieveUser(username,password, cb){
         }
 
         var queryString =
-            "Select * from appUser" +
+            "Select * from app_user" +
             "  WHERE username = $1" +
             "  AND password = $2" ;
 
@@ -221,7 +223,7 @@ function retrieveTeacherClass(teacherId,cb) {
 
         var queryString =
             "  SELECT * from class" +
-            "  WHERE teacherId = $1" +
+            "  WHERE teacher_id = $1" +
             "  ORDER BY name";
         console.log(queryString);
 
@@ -249,8 +251,8 @@ function retrieveStudentClasses(studentId,cb) {
 
         var queryString =
             "SELECT * from class" +
-            "INNER JOIN appUserClass as auc on auc.classId = class.id" +
-            "INNER JOIN appUser as au on au.id = auc.appUserId" +
+            "INNER JOIN app_user_class as auc on auc.class_id = class.id" +
+            "INNER JOIN app_user as au on au.id = auc.app_user_id" +
             "WHERE au.id = $1" +
             "ORDER BY name";
         console.log(queryString);
@@ -302,7 +304,7 @@ function saveLecture(lecture , done){
             function saveLecture(cb) {
                 var queryString =
                     "  INSERT INTO lecture" +
-                    "  (id, name, classId, videoUrl)" +
+                    "  (id, name, class_id, video_url)" +
                     "  VALUES ($1, $2, $3, $4)";
 
 
@@ -318,7 +320,7 @@ function saveLecture(lecture , done){
                 for (var i =0; i< lecture.problems.length; i++) {
                     var queryString =
                         "  INSERT INTO problem" +
-                        "  (id, lectureId, problemType, question)" +
+                        "  (id, lecture_id, problem_type, question)" +
                         "  VALUES ($1, $2, $3, $4)";
 
                     client.query(queryString, [i ,lecture.id, lecture.problems[i].problemType, lecture.problems[i].question], function(err) {
@@ -339,8 +341,8 @@ function saveLecture(lecture , done){
                 async.each(lecture.problems[0].answers , function(answer, next) {
                     console.log(answer);
                     var queryString =
-                        "  INSERT INTO problemAnswer" +
-                        "  (id, problemId, lectureId, possibleAnswer, correctAnswer)" +
+                        "  INSERT INTO problem_answer" +
+                        "  (id, problem_id, lecture_id, possible_answer, correct_answer)" +
                         "  VALUES ($1, $2, $3, $4, $5)";
 
 
