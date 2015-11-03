@@ -9,7 +9,7 @@ function User(user){
     this.username = user.username;
     this.password = user.password;
     this.email = user.email;
-    this.teacher = user.teacher;
+    this.isTeacher = user.isTeacher;
     this.id = user.id || uuid.v4();
 }
 

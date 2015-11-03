@@ -10,12 +10,12 @@ describe('Testing Routes', function() {
         request(app).get('/').expect(200, done);
     });
 
-    it.skip("posts successfully", function(done) {
+    it("posts successfully", function(done) {
         var tu = {
-            username: "teacher1",
-            password: "test",
+            username: "Enrique",
+            password: "abc123",
             email: "teacher1@gmail.com",
-            teacher: true
+            isTeacher: true
         };
         request(app)
             .post('/register')
@@ -25,7 +25,6 @@ describe('Testing Routes', function() {
                 if (err) {
                     throw err;
                 }
-                console.log(res);
                 assert.equal(res.status, 200);
                 done();
             });
